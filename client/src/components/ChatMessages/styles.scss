@@ -1,0 +1,89 @@
+$blueColor: #665dfe;
+$blueDisColor: #8f8beb;
+%scrollbar {
+    ::-webkit-scrollbar {
+        width: 0.5vh;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom,  $blueDisColor 0%, $blueColor 100%);
+        border: none;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: $blueColor;
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background: $blueColor;
+    }
+    ::-webkit-scrollbar-track {
+        background: $blueDisColor;
+        border: none;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+}
+.wrapperChatMessages {
+    padding: 15px;
+    height: 100%;
+    background-color: #fff;
+    padding-right: 5px;
+    .messagesBlock {
+        height: 100%;
+        width: 100%;
+        padding-right: 0;
+        @extend %scrollbar;
+        ul {
+            display: flex;
+            flex-direction: column;
+            padding: 15px 15px;
+            padding-right: 0;
+            overflow-y:scroll;
+            height: calc(100vh - 123px) !important;
+            li {
+                list-style: none;
+            }
+        }
+        &__message {
+            padding: 1rem;
+            background-color: #f5f6fa;
+            color: #8094ae;
+            border-top-right-radius: 1.25rem;
+            border-bottom-right-radius: 1.25rem;
+            text-align: left;
+            max-width: 25rem;
+            width: 100%;
+            margin-bottom: 20px;
+            &__user {
+                color: #665dfe;
+                font-weight: 600;
+            }
+            &__text {
+                color: #68788d;
+            }
+            .messageTime {
+                text-align: right;
+            }
+        }
+        .messageSelf {
+            background-color: #665dfe;
+            display: flex;
+            margin-left: auto;
+            margin-right: 15px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: 1.25rem;
+            border-bottom-left-radius: 1.25rem;
+            .messagesBlock__message__user {
+                color: #fff;
+            }
+            .messageTime {
+                color: rgba(255, 255, 255, 0.7);
+            }
+            .messagesBlock__message__text {
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+    }
+}
