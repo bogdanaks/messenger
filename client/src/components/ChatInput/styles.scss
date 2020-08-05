@@ -1,0 +1,63 @@
+%scrollbar {
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+    ::-webkit-scrollbar-thumb {
+        border: none;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-track {
+        // background: $blueDisColor;
+        border: none;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+}
+.chatInput {
+    padding: .75rem 2.25rem;
+    border-top: 1px solid #e5e9f2;
+    background-color: #fff;
+    .inputText {
+        display: flex;
+        align-items: center;
+        @extend %scrollbar;
+        textarea {
+            display: flex;
+            width: 100%;
+            font-size: 0.875rem;
+            position: relative;
+            flex: 1 1 auto;
+            resize: none !important;
+            &:focus {
+                border: none !important;
+                border-color: Transparent !important;
+                outline: none !important;
+            }
+        }
+    }
+    .inputSend {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        button {
+            width: 100px;
+            height: 50px;
+            font-size: 14px;
+            color: #fff;
+            border-radius: .3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #665dfe;
+            border: 1px solid #665dfe;
+            &:hover {
+                background-color: #4237fe;
+                border-color: #362afe;
+            }
+        }
+    }
+}
