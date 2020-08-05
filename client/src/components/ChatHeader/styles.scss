@@ -1,0 +1,76 @@
+.chatList__header {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #e5e9f2;
+    position: relative;
+    .chatTitle {
+        display: flex;
+        flex-direction: row;
+        border-right: 1px solid #e5e9f2;
+        h4 {
+            margin-left: 15px;
+            margin-top: 24px;
+            margin-bottom: 24px;
+        }
+        span {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 30px;
+            margin-left: auto;
+            margin-right: 15px;
+            color: #adb5bd;
+            cursor: pointer;
+            transition: color .2s ease-in-out;
+            &:hover {
+                color: #665dfe;
+            }
+        }
+    }
+    .chatInfo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        h5 {
+            margin-bottom: 0;
+            margin-left: 15px;
+            color: #787d83;
+        }
+        .usersBtns {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height: 100%;
+            &__users {
+                display: flex;
+                width: 35px;
+                height: 100%;
+                align-items: center;
+                position: relative;
+                margin-left: auto;
+                img {
+                    position: absolute;
+                    width: 100%;
+                    cursor: pointer;
+                }
+            }
+            &__userAdd {
+                display: flex;
+                width: 32px;
+                height: 100%;
+                align-items: center;
+                position: relative;
+                margin-left: 20px;
+                img {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 25px;
+                    width: 100%;
+                }
+            }
+
+        }
+    }
+}
