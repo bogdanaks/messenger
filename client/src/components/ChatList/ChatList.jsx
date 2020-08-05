@@ -5,10 +5,6 @@ const ChatList = () => {
     return (
         <div className="wrapperChatList">
             <div className="container-fluid p-0">
-                <div className="row chatList__header no-gutters mh-30">
-                    <h4>Chats (2)</h4>
-                    <span>+</span>
-                </div>
                 <div className="row chatList__list no-gutters mh-70">
                     <ul className="chatList__content">
                         <li className="chatList__list__item active">
