@@ -4,6 +4,7 @@ import './styles.scss'
 import ChatHeader from '../../components/ChatHeader/ChatHeader'
 import ChatList from '../../components/ChatList/ChatList'
 import ChatMessages from '../../components/ChatMessages/ChatMessages'
+import ChatInput from '../../components/ChatInput/ChatInput'
 
 const Chats = () => {
     return (
@@ -15,7 +16,11 @@ const Chats = () => {
                         <ChatList />
                     </div>
                     <div className="col-9">
-                        <ChatMessages />
+                        <div className="container-fluid">
+                            <div className="row"><ChatMessages /></div>
+                            <div className="row"><ChatInput /></div>
+                        </div>
+
                     </div>
                 </div>
             </div>
