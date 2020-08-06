@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles.scss'
 
-const ChatMessages = () => {
+const ChatMessages = ({ id }) => {
     return (
         <div className="wrapperChatMessages">
             <div className="container-fluid messagesBlock">
