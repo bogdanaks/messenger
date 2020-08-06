@@ -3,13 +3,19 @@ import './styles.scss'
 
 import usersImg from '../../assets/users.png'
 import userAddImg from '../../assets/userAdd.png'
+import exitImg from '../../assets/exit.png'
 
 const ChatHeader = ({ id }) => {
     return (
         <div className="row chatList__header no-gutters">
             <div className="col-3 chatTitle">
                 <h4>Chats (2)</h4>
-                <span>+</span>
+                <div className="chatTitle__createChat">
+                    <span>+</span>
+                </div>
+                <div className="exitImg">
+                    <img src={exitImg} alt="Exit"/>
+                </div>
             </div>
             <div className="col-9 chatInfo">
                 <div className="col-8">
