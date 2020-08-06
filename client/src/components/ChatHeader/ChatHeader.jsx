@@ -10,7 +10,7 @@ const ChatHeader = ({ id }) => {
     const history = useHistory()
     const handleExitClick = () => {
         localStorage.clear('auth')
-        history.push('/auth')
+        history.push('/login')
     }
     return (
         <div className="row chatList__header no-gutters">
