@@ -1,19 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import api from '../../axios'
 
 import "./styles.scss"
 
 const Main = () => {
-    const [name, setName] = useState('')
-    const handleInputChange = (e) => {
-        setName(e.target.value)
-    }
-    const handleCreateChat = (e) => {
+    const history = useHistory()
+    useEffect(() => {
+        if(!localStorage.getItem('auth')) history.push('/login')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    const handleCreateChat = async (e) => {
         e.preventDefault()
         const chatObj = {
-            id: Date.now()
+            chatId: Date.now(),
+            userId: localStorage.getItem('auth')
         }
-        api.post('/api/chat/create', chatObj).catch(err => console.log(err) )
+        await api.post('/api/chat/create', chatObj)
+            .then(res => {
+                history.push('/chats/' + res.data.chatId)
+            })
+            .catch(err => alert(err) )
     }
     return (
         <div className="container d-flex flex-column">
@@ -21,10 +28,6 @@ const Main = () => {
                 <div className="col-12 col-md-6 col-lg-5 col-xl-4">
                     <h1>Create new chat</h1>
                     <form className="mb-3">
-                        <div className="form-group">
-                            <label htmlFor="name" className="sr-only">Name</label>
-                            <input type="text" className="form-control form-control-md" id="name" placeholder="Enter your name" onChange={handleInputChange} value={name} />
-                        </div>
                         <button className="btn btn-primary btn-lg btn-block text-uppercase font-weight-semibold" onClick={handleCreateChat}>CREATE</button>
                     </form>
                 </div>
