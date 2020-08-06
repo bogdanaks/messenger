@@ -5,6 +5,8 @@ import {
   Route
 } from "react-router-dom";
 
+import Login from './pages/Auth/Login'
+import Register from './pages/Auth/Register'
 import Main from './pages/Main/Main'
 import Chats from './pages/Chats/Chats'
 
@@ -14,7 +16,10 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" component={Main} exact/>
-          <Route path="/chats" component={Chats} exact/>
+          <Route path="/login" component={Login} exact/>
+          <Route path="/register" component={Register} exact/>
+          <Route path="/chats/:id" component={Chats} />
+          <Route path="/chats" component={Chats} />
         </Switch>
       </Router>
     </div>
