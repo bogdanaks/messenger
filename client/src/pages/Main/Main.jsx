@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import api from '../../axios'
+
 import "./styles.scss"
+
 const Main = () => {
+    const [name, setName] = useState('')
+    const handleInputChange = (e) => {
+        setName(e.target.value)
+    }
+    const handleCreateChat = (e) => {
+        e.preventDefault()
+        const chatObj = {
+            id: Date.now()
+        }
+        api.post('/api/chat/create', chatObj).catch(err => console.log(err) )
+    }
     return (
         <div className="container d-flex flex-column">
             <div className="row no-gutters text-center align-items-center justify-content-center min-vh-100">
@@ -9,9 +23,9 @@ const Main = () => {
                     <form className="mb-3">
                         <div className="form-group">
                             <label htmlFor="name" className="sr-only">Name</label>
-                            <input type="text" className="form-control form-control-md" id="name" placeholder="Enter your name"/>
+                            <input type="text" className="form-control form-control-md" id="name" placeholder="Enter your name" onChange={handleInputChange} value={name} />
                         </div>
-                        <button className="btn btn-primary btn-lg btn-block text-uppercase font-weight-semibold" type="submit">CREATE</button>
+                        <button className="btn btn-primary btn-lg btn-block text-uppercase font-weight-semibold" onClick={handleCreateChat}>CREATE</button>
                     </form>
                 </div>
             </div>
