@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import './styles.scss'
 
 import usersImg from '../../assets/users.png'
@@ -6,6 +7,11 @@ import userAddImg from '../../assets/userAdd.png'
 import exitImg from '../../assets/exit.png'
 
 const ChatHeader = ({ id }) => {
+    const history = useHistory()
+    const handleExitClick = () => {
+        localStorage.clear('auth')
+        history.push('/auth')
+    }
     return (
         <div className="row chatList__header no-gutters">
             <div className="col-3 chatTitle">
@@ -14,7 +20,7 @@ const ChatHeader = ({ id }) => {
                     <span>+</span>
                 </div>
                 <div className="exitImg">
-                    <img src={exitImg} alt="Exit"/>
+                    <img src={exitImg} alt="Exit" onClick={handleExitClick}/>
                 </div>
             </div>
             <div className="col-9 chatInfo">
