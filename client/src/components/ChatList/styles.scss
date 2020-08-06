@@ -60,6 +60,9 @@ $blueDisColor: #8f8beb;
             border-radius: 0.25rem;
             transition: all .3s ease;
             margin-right: 10px;
+            &:hover {
+                border: 1px solid #665dfe; 
+            }
             .chatId {
                 font-size: 14px;
                 opacity: 0.7;
