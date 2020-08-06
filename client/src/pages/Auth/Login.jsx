@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import api from '../../axios'
 
 import './styles.scss'
@@ -14,16 +14,19 @@ const Auth = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    const handleBtnClick = (e) => {
-        // e.preventDefault()
-        // const userObj = {
-        //     userId: Date.now(),
-        //     name,
-        //     password
-        // }
-        // localStorage.setItem('auth', userObj.userId)
-        // api.post('/api/user/create', userObj).catch(err => console.log(err))
-        // history.push('/chats')
+    const handleBtnClick = async (e) => {
+        e.preventDefault()
+        const userObj = {
+            name,
+            password
+        }
+        await api.post('/api/user/login', userObj)
+            .then(res => {
+                console.log(res.data.userId)
+                localStorage.setItem('auth', res.data.userId)
+                history.push('/chats')
+            })
+            .catch(err => alert(err.response.request.response))        
     }
     return (
         <div className="container d-flex flex-column">
@@ -38,6 +41,11 @@ const Auth = () => {
                         <div className="form-group">
                             <label htmlFor="password" className="sr-only">Password</label>
                             <input type="password" className="form-control form-control-md" id="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+                        </div>
+                        <div className="row alreadyAuth">
+                            <div className="col-12">
+                                <Link to="/register">Not registered yet? Click to register</Link>
+                            </div>
                         </div>
                         <button className="btn btn-primary btn-lg btn-block text-uppercase font-weight-semibold" onClick={handleBtnClick}>LOGIN</button>
                     </form>
