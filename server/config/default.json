@@ -1,4 +1,4 @@
 {  
-    "mongoUri": "",
+    "mongoUri": "mongodb+srv://bogdanaks:A737101298TE@cluster0.ebwpp.mongodb.net/messenger?retryWrites=true&w=majority",
     "port": 5000
 }
