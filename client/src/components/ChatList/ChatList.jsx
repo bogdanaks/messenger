@@ -1,210 +1,54 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import api from '../../axios'
 import './styles.scss'
 
-const ChatList = () => {
+const ChatList = ({ id }) => {
+    const [chatsList, setChatsList] = useState([])
+    useEffect(() => {
+        api.get(`/api/user/getChats/${localStorage.getItem('auth')}`)
+            .then(res => {
+                api.get(`/api/message/getLastMsg/${res.data.inChats}`)
+                    .then(res => {
+                        let lastMsgArray = res.data
+                        lastMsgArray.forEach(el => {
+                            api.get(`/api/user/getNameById/${el.userId}`)
+                                .then(res => {
+                                    el.userName = res.data.name
+                                })
+                                .catch(err => alert(err))
+                        })
+                        setChatsList(lastMsgArray)
+                    })
+                    .catch(err => alert(err))
+            })
+            .catch(err => alert(err))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <div className="wrapperChatList">
             <div className="container-fluid p-0">
                 <div className="row chatList__list no-gutters mh-70">
                     <ul className="chatList__content">
-                        <li className="chatList__list__item active">
+                        {chatsList.map((item , index) => (
+                        <li className="chatList__list__item active" key={item.chatId}>
                             <div className="col-12 itemBlock p-0">
                                 <div className="row">
                                     <div className="col-8">
-                                        <span className="chatId">#123123123</span>
+                                        <span className="chatId">#{item.chatId}</span>
                                     </div>
                                     <div className="col-4 chatTime text-right">10:20 pm</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
+                                    <div className="col-12 userName">{item.userName}</div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
+                                        <p className="userMessage">{item.text}</p>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="chatList__list__item">
-                            <div className="col-12 itemBlock p-0">
-                                <div className="row">
-                                    <div className="col-8">
-                                        <span className="chatId">#123123123</span>
-                                    </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 userName">Bogdan Aksenov</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <p className="userMessage">Lorem ipsum dolor sit ametw wadawd dawdawd awdawd.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        ))}
                     </ul>
                 </div>
             </div>
