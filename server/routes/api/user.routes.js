@@ -4,6 +4,18 @@ const router = Router()
 // Import Users Model
 const Users = require('../../models/Users')
 
+// Import Chats Model
+const Chats = require('../../models/Chats')
+
+router.get('/getChats/:userId', async (req, res) => {
+    try {
+        const user = await Users.findOne({userId: req.params.userId})
+        res.send({inChats: user.inChats})
+    } catch(err) {
+        res.status(400).send(err)
+    }
+})
+
 router.post('/login', async (req, res) => {
     try {
         // Checking if login exists
