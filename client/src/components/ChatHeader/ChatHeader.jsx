@@ -15,7 +15,7 @@ const ChatHeader = ({ id }) => {
     return (
         <div className="row chatList__header no-gutters">
             <div className="col-3 chatTitle">
-                <h4>Chats (2)</h4>
+                <h4>Chats</h4>
                 <div className="chatTitle__createChat">
                     <span>+</span>
                 </div>
