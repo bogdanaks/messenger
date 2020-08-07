@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import socket from '../../socket'
+
 import api from '../../axios'
 
 import './styles.scss'
@@ -12,7 +14,9 @@ import ChatInput from '../../components/ChatInput/ChatInput'
 const Chats = () => {
     const { id } = useParams()
     const [usersInChat, setUsersInChat] = useState([])
+
     useEffect(() => {
+        window.socket = socket
         api.get(`/api/chat/getUserNamesIn/${id}`)
             .then(res => {
                 setUsersInChat(res.data)
