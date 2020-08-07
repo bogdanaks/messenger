@@ -9,11 +9,6 @@ const ChatsSchema = new Schema({
     users: {
         type: Array
     },
-    messages: [{
-        senderId: String,
-        senderName: String,
-        text: String
-    }, { timestamps: true }],
 }, { timestamps: true })
 
 module.exports = Chat = mongoose.model('chats', ChatsSchema)
