@@ -41,7 +41,7 @@ $blueDisColor: #8f8beb;
             flex-direction: column;
             padding: 15px 15px;
             padding-right: 0;
-            overflow-y:scroll;
+            overflow-y:auto;
             height: calc(100vh - 175px) !important;
             margin-bottom: 0;
             li {
