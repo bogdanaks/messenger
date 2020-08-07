@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
+
+import socket from '../../socket'
 import api from '../../axios'
 import './styles.scss'
 
 const ChatMessages = ({ id }) => {
     const [messages, setMessages] = useState([])
+    const [socketMsg, setSocketMsg] = useState()
     useEffect(() => {
         api.get(`/api/message/getMsgById/${id}`)
         .then(res => {
@@ -12,12 +15,19 @@ const ChatMessages = ({ id }) => {
         .catch(err => alert(err))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    useEffect(() => {
+        socket.getMessage(setSocketMsg)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    useEffect(() => {
+        if(socketMsg) setMessages(prevState => [...prevState, socketMsg])
+    }, [socketMsg])
     return (
         <div className="wrapperChatMessages">
             <div className="container-fluid messagesBlock">
                 <ul>
                     {messages.map((item, indx) => (
-                        <li key={item._id}>
+                        <li key={indx}>
                             <div className="row messagesBlock__message messageSelf">
                                 <div className="row">
                                     <div className="col-8"><div className="col-12 messagesBlock__message__user">{item.userName}</div></div>
