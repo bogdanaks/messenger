@@ -42,12 +42,12 @@ router.post('/create', async (req, res) => {
             userName: 'Bot',
             text: 'Chat created'
         })
-        await newMsg.save().then(msg => res.json(msg))
+        await newMsg.save()
 
         await user.inChats.push(req.body.chatId)
         user.save()
 
-        await newChat.save().then(chat => res.json(chat))
+        await newChat.save().then(chat => res.send(chat))
     } catch(err) {
         res.status(400).send(err)
     }
