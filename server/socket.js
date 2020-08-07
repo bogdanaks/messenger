@@ -1,7 +1,7 @@
 const socketMiddleware = (socket) => {
 
     socket.on('CHAT:JOIN', data => {
-        socket.join(data.chatId);
+        socket.join(data.chatId)
     })
 
     socket.on('CHAT:LEAVE', data => {
@@ -9,10 +9,7 @@ const socketMiddleware = (socket) => {
     })
 
     socket.on('sendMessage', data => {
-        console.log(data)
-        socket.broadcast
-        .to(data.chatId)
-        .emit('getMessage', data)
+        socket.to(data.chatId).emit('getMessage', data)
     })
 }
 
