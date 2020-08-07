@@ -14,7 +14,7 @@ const Main = () => {
         e.preventDefault()
         const chatObj = {
             chatId: Date.now(),
-            userId: localStorage.getItem('auth')
+            userId: JSON.parse(localStorage.getItem('auth')).userId
         }
         await api.post('/api/chat/create', chatObj)
             .then(res => {
