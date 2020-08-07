@@ -23,7 +23,7 @@ const Auth = () => {
         }
         await api.post('/api/user/register', userObj)
             .then(res => {
-                localStorage.setItem('auth', userObj.userId)
+                localStorage.setItem('auth', JSON.stringify({userId: res.data.userId, name: res.data.name}))
                 history.push('/chats')
             })
             .catch(err => alert(err.response.request.response))
