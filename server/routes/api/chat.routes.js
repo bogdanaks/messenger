@@ -5,6 +5,8 @@ const router = Router()
 const Chats = require('../../models/Chats')
 // Import User Model
 const Users = require('../../models/Users')
+// Import Message Model
+const Messages = require('../../models/Messages')
 
 router.get('/', async (req, res) => {
     // console.log('Test')
@@ -34,10 +36,16 @@ router.post('/create', async (req, res) => {
             chatId: req.body.chatId,
             users: user
         })
+        const newMsg = new Messages({
+            chatId: req.body.chatId,
+            userId: req.body.userId,
+            userName: 'Bot',
+            text: 'Chat created'
+        })
+        await newMsg.save().then(msg => res.json(msg))
 
         await user.inChats.push(req.body.chatId)
         user.save()
-
 
         await newChat.save().then(chat => res.json(chat))
     } catch(err) {
