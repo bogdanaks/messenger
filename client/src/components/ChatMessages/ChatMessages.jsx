@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import socket from '../../socket'
-import api from '../../axios'
+import socket from '../../utils/socket'
+import api from '../../utils/axios'
 import './styles.scss'
 
 const ChatMessages = ({ id }) => {
