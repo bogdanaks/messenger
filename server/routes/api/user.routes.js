@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
         if(req.body.password === user.password) validPassword = true
         if(!validPassword) return res.status(400).send('Invalid password')
 
-        res.send({userId: user.userId})
+        res.send({userId: user.userId, name: user.name})
     } catch(err) {
         res.status(400).send(err)
     }
@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
     })
     try {
         await newUser.save()
-        res.send({userId: newUser.userId})
+        res.send({userId: newUser.userId, name: newUser.name})
     } catch(err) {
         res.status(400).send("Final error: "+ err)
     }
