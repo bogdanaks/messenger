@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, Link } from 'react-router-dom'
-import api from '../../axios'
+import api from '../../utils/axios'
 
 import './styles.scss'
 
