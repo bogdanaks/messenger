@@ -9,11 +9,18 @@ const Users = require('../../models/Users')
 router.get('/', async (req, res) => {
     // console.log('Test')
 })
-router.get('/:chatId', async (req, res) => {
+router.get('/getUserNamesIn/:chatId', async (req, res) => {
     try {
         await Chats.find({chatId: req.params.chatId}, (err, items) => {
             if(err) return res.status(404).send(err)
-            return res.send(items)
+
+            let userNames = []
+            items.forEach(( el ) => {
+                el.users.forEach(el => {
+                    userNames.push(el.name)
+                })
+            })
+            return res.send(userNames)
         })
     } catch(err) {
         res.status(400).send(err)
