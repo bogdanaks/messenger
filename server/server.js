@@ -3,15 +3,27 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const config = require('config')
 const http = require('http')
-// const socketio = require('socket.io')
+const socketio = require('socket.io')
+const socketMW = require('./socket')
 
 const app = express()
 const server = http.createServer(app)
-// const io = socketio(server)
+const io = socketio(server)
 const PORT = process.env.PORT || config.get('port')
 
 app.use(cors())
 app.use(express.json())
+
+//socetio
+io.on('connection', (socket) => {
+    console.log("Socket io connection")
+
+    socketMW(socket)
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    })
+})
 
 //routes
 app.use('/api/chat', require('./routes/api/chat.routes'))
