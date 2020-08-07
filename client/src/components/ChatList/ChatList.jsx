@@ -6,18 +6,10 @@ const ChatList = ({ id }) => {
     const [chatsList, setChatsList] = useState([])
     useEffect(() => {
         api.get(`/api/user/getChats/${localStorage.getItem('auth')}`)
-            .then(res => {
-                api.get(`/api/message/getLastMsg/${res.data.inChats}`)
+            .then( async (res) => {
+                await api.get(`/api/message/getLastMsg/${res.data.inChats}`)
                     .then(res => {
-                        let lastMsgArray = res.data
-                        lastMsgArray.forEach(el => {
-                            api.get(`/api/user/getNameById/${el.userId}`)
-                                .then(res => {
-                                    el.userName = res.data.name
-                                })
-                                .catch(err => alert(err))
-                        })
-                        setChatsList(lastMsgArray)
+                        setChatsList(res.data)
                     })
                     .catch(err => alert(err))
             })
