@@ -10,6 +10,10 @@ const MessagesSchema = new Schema({
         type: String,
         required: true
     },
+    userName: {
+        type: String,
+        required: true
+    },
     text: {
         type: String,
         required: true
