@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-let socket = io('http://localhost:5000')
+let socket = io()
 
 const leaveChat = (chatId) => {
     socket.emit('CHAT:LEAVE', {
