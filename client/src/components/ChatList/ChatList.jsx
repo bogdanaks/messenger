@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { getLastMsgs } from '../../redux/actions'
+import { getLastMsgs, initMessages } from '../../redux/actions'
 import './styles.scss'
 
 const ChatList = ({ id }) => {
@@ -16,6 +16,7 @@ const ChatList = ({ id }) => {
     }, [])
     const handleChatClick = (chatId) => {
         history.push('/chats/'+chatId)
+        dispatch(initMessages(chatId))
     }
     return (
         <div className="wrapperChatList">
