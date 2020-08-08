@@ -1,4 +1,4 @@
-import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE, SET_MESSAGE, INIT_MESSAGE } from "./actionTypes"
+import { GET_CHATS, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, INIT_MESSAGE } from "./actionTypes"
 import socket from '../utils/socket'
 import api from '../utils/axios'
 
@@ -86,11 +86,11 @@ export function initMessages(chatId) {
     }
 }
 
-export function sendMessage(text, id) {
+export function sendMessage(text, id, userId) {
     return async dispatch => {
         const msgObj = {
             chatId: id,
-            userId: JSON.parse(localStorage.getItem('auth')).userId,
+            userId,
             userName: JSON.parse(localStorage.getItem('auth')).name,
             text
         }
@@ -98,6 +98,7 @@ export function sendMessage(text, id) {
             await api.post('/api/message/sendMessage', msgObj)
             .then(res => {
                 dispatch({ type: SET_MESSAGE, payload: res.data })
+                dispatch({ type: SET_LAST_MSG, payload: res.data })
                 // socket.joinChat(res.data[0].chatId)
             })
         } catch (error) {
