@@ -1,4 +1,4 @@
-import { GET_CHATS, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, INIT_MESSAGE } from "./actionTypes"
+import { GET_CHATS, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from "./actionTypes"
 import socket from '../utils/socket'
 import api from '../utils/axios'
 
@@ -45,9 +45,9 @@ export function getLastMsgs(history, id) {
                     await api.get(`/api/message/getLastMsg/${data}`)
                     .then(res => {
                         dispatch({ type: GET_LAST_MSG, payload: res.data })
-                        // res.data.forEach((el) => {
-                            // socket.joinChat(el.chatId)
-                        // })
+                        res.data.forEach((el) => {
+                            socket.joinChat(el.chatId)
+                        })
                     })
                     .catch(err => {
                         alert(err)
@@ -68,7 +68,6 @@ export function getMsgByChatId(chatId) {
             await api.get(`/api/message/getMsgById/${chatId}`)
             .then(res => {
                 dispatch({ type: SET_MESSAGE, payload: res.data })
-                // socket.joinChat(res.data[0].chatId)
             })
             .catch(err => alert(err))
         } catch (err) {
@@ -86,7 +85,6 @@ export function initMessages(chatId) {
                 await api.get(`/api/message/getMsgById/${chatId}`)
                 .then(res => {
                     dispatch({ type: INIT_MESSAGE, payload: res.data })
-                    // socket.joinChat(res.data[0].chatId)
                 })
                 .catch(err => alert(err.response.request.response))
             }
@@ -107,17 +105,27 @@ export function sendMessage(text, id, userId) {
         try {
             await api.post('/api/message/sendMessage', msgObj)
             .then(res => {
-                dispatch({ type: SET_MESSAGE, payload: res.data })
+                dispatch({ type: SET_MESSAGE_STORE, payload: res.data })
                 dispatch({ type: SET_LAST_MSG, payload: res.data })
-                // socket.joinChat(res.data[0].chatId)
+                socket.sendMessage(res.data)
             })
         } catch (error) {
             alert(error)
         }
     }
 }
-
-
+export function setMessageStore(msg) {
+    return {
+        type: SET_MESSAGE_STORE,
+        payload: msg
+    }
+}
+export function setLastMessageStore(msg) {
+    return {
+        type: SET_LAST_MSG,
+        payload: msg
+    }
+}
 
 
 
