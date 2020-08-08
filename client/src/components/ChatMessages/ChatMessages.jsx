@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { setLastMessageStore, setMessageStore, initMessages } from '../../redux/actions'
@@ -9,6 +9,7 @@ const ChatMessages = ({ id }) => {
     const [socketMsg, setSocketMsg] = useState()
     const dispatch = useDispatch()
     const messages = useSelector(state => state.chats.messages)
+    const chatRef = useRef()
     useEffect(() => {
         dispatch(initMessages(id))
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,10 +25,13 @@ const ChatMessages = ({ id }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socketMsg])
+    useEffect(() => {
+        chatRef.current.scrollTop = 99999999
+    }, [messages])
     return (
         <div className="wrapperChatMessages">
             <div className="container-fluid messagesBlock">
-                <ul>
+                <ul ref={chatRef}>
                     {messages.map((item, indx) => (
                         <li key={indx}>
                             <div className={item.userId === JSON.parse(localStorage.getItem('auth')).userId 
