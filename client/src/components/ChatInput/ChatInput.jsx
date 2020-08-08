@@ -10,9 +10,15 @@ const ChatInput = ({ id }) => {
     const handleTextareaChange = (e) => {
         setMessage(e.target.value)
     }
-    const handleSendClick = () => {
+    const handleSendClick = (e) => {
         dispatch(sendMessage(message, id, JSON.parse(localStorage.getItem('auth')).userId))
         setMessage('')
+    }
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            dispatch(sendMessage(message, id, JSON.parse(localStorage.getItem('auth')).userId))
+            setMessage('')
+        }
     }
     return (
         <div className="container-fluid">
@@ -21,7 +27,12 @@ const ChatInput = ({ id }) => {
                    <div className="row">
                        <div className="col">
                             <div className="inputText">
-                                <textarea className="form-control transparent-bg border-0" value={message} placeholder="Write your message..." onChange={handleTextareaChange}></textarea>
+                                <textarea 
+                                    className="form-control transparent-bg border-0" 
+                                    value={message} placeholder="Write your message..." 
+                                    onKeyDown={handleKeyDown} 
+                                    onChange={handleTextareaChange}
+                                ></textarea>
                             </div>
                        </div>
                        <div className="col-auto">
