@@ -1,8 +1,9 @@
-import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE } from './actionTypes'
+import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE, SET_MESSAGE } from './actionTypes'
 
 const initialState = {
     chatList: [],
-    lastMsgList: []
+    lastMsgList: [],
+    messages: []
 }
 
 export const chatsReducer = (state = initialState, action) => {
@@ -13,6 +14,8 @@ export const chatsReducer = (state = initialState, action) => {
             return { ...state, lastMsgList: state.lastMsgList.concat(action.payload) }
         case GET_LAST_MSG_ONE:
             return { ...state, lastMsgList: state.lastMsgList.concat(action.payload) }
+        case SET_MESSAGE:
+            return { ...state, messages: state.messages.concat(action.payload) }
         default: return state
     }
 }
