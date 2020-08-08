@@ -9,7 +9,7 @@ const ChatList = ({ id }) => {
     const dispatch = useDispatch()
     const lastMsgList = useSelector(state => state.chats.lastMsgList)
     const history = useHistory()
-
+    
     useEffect(() => {
         dispatch(getLastMsgs())
         // eslint-disable-next-line react-hooks/exhaustive-deps
