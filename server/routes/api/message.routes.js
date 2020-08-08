@@ -16,16 +16,35 @@ router.get('/getMsgById/:chatId', async (req, res) => {
 })
 
 router.get('/getLastMsg/:chatIds', async (req, res) => {
+    const chatIds = req.params.chatIds.split(',')
+    function getUnique(arr, comp) {
+        const unique =  arr.map(e => e[comp])
+            .map((e, i, final) => final.indexOf(e) === i && i)
+            .filter((e) => arr[e]).map(e => arr[e])
+        return unique
+    }
     try {
-        await Messages.find({
-            'chatId': { $in: req.params.chatIds.split(',')}
-        }, (err, items) => {
-            if(err) return res.status(404).send(err)
-            return res.json(items)
-        });
+        const msgs = await Messages.find({ 'chatId': { $in: chatIds } }).sort({createdAt: -1})
+        return res.json(getUnique(msgs, 'chatId'))
     } catch(err) {
         res.status(400).send(err)
     }
 })
+
+router.post('/sendMessage', async (req, res) => {
+    try {
+        const newMsg = new Messages({
+            chatId: req.body.chatId,
+            userId: req.body.userId,
+            userName: req.body.userName,
+            text: req.body.text
+        })
+
+        await newMsg.save().then(msg => res.send(msg))
+    } catch(err) {
+        res.status(400).send(err)
+    }
+})
+
 
 module.exports = router
