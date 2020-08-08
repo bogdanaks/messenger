@@ -11,7 +11,7 @@ const ChatList = ({ id }) => {
     const history = useHistory()
     
     useEffect(() => {
-        dispatch(getLastMsgs())
+        dispatch(getLastMsgs(history, id))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleChatClick = (chatId) => {
