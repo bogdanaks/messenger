@@ -20,12 +20,8 @@ const getMessage = (state) => {
     })
 }
 
-const sendMessage = (text, chatId, userId) => {
-    socket.emit('sendMessage', {
-        text,
-        chatId,
-        userId
-    })
+const sendMessage = (msg) => {
+    socket.emit('sendMessage', msg)
 }
 
 
