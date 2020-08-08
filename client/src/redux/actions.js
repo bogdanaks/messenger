@@ -36,20 +36,26 @@ export function getChats() {
     }
 }
 
-export function getLastMsgs() {
+export function getLastMsgs(history, id) {
     return async dispatch => {
         try {
-            getChatsList().then( async (data) => {
-                await api.get(`/api/message/getLastMsg/${data}`)
-                .then(res => {
-                    dispatch({ type: GET_LAST_MSG, payload: res.data })
-                    // res.data.forEach((el) => {
-                        // socket.joinChat(el.chatId)
-                    // })
-                })
-                .catch(err => alert(err))
+            getChatsList()
+            .then( async (data) => {
+                if(data.length) {
+                    await api.get(`/api/message/getLastMsg/${data}`)
+                    .then(res => {
+                        dispatch({ type: GET_LAST_MSG, payload: res.data })
+                        // res.data.forEach((el) => {
+                            // socket.joinChat(el.chatId)
+                        // })
+                    })
+                    .catch(err => {
+                        alert(err)
+                    })
+                } else {
+                    history.push('/invite/'+id)
+                }
             })
-
         } catch (err) {
             alert(err)
         }
@@ -74,14 +80,18 @@ export function getMsgByChatId(chatId) {
 export function initMessages(chatId) {
     return async dispatch => {
         try {
-            await api.get(`/api/message/getMsgById/${chatId}`)
-            .then(res => {
-                dispatch({ type: INIT_MESSAGE, payload: res.data })
-                // socket.joinChat(res.data[0].chatId)
-            })
-            .catch(err => alert(err))
+            const response = await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
+            const inChats = response.data.inChats
+            if(inChats.includes(Number(chatId))) {
+                await api.get(`/api/message/getMsgById/${chatId}`)
+                .then(res => {
+                    dispatch({ type: INIT_MESSAGE, payload: res.data })
+                    // socket.joinChat(res.data[0].chatId)
+                })
+                .catch(err => alert(err.response.request.response))
+            }
         } catch (err) {
-            alert(err)
+            alert(err.response.request.response)
         }
     }
 }
@@ -115,7 +125,9 @@ export function sendMessage(text, id, userId) {
 const getChatsList = async () => {
     try {
         return await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
-            .then( res => res.data.inChats)
+            .then( res => {
+                return res.data.inChats
+            })
             .catch(err => alert(err))
     } catch(err) {
         alert(err)
