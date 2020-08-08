@@ -9,6 +9,7 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Main from './pages/Main/Main'
 import Chats from './pages/Chats/Chats'
+import Invite from './pages/Invite/Invite'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/register" component={Register} exact/>
           <Route path="/chats/:id" component={Chats} />
           <Route path="/chats" component={Chats} />
+          <Route path="/invite/:chatId" component={Invite} />
         </Switch>
       </Router>
     </div>
