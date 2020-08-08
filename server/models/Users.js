@@ -14,9 +14,9 @@ const UsersSchema = new Schema({
         type: String,
         required: true
     },
-    inChats: {
-        type: Array
-    },
+    inChats: [{
+        type: Number
+    }],
 }, { timestamps: true })
 
 module.exports = User = mongoose.model('users', UsersSchema)
