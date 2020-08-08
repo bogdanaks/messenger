@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-// Import Users Model
+// Import Messages Model
 const Messages = require('../../models/Messages')
 
 router.get('/getMsgById/:chatId', async (req, res) => {
