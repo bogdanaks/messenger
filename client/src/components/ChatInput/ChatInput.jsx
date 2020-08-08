@@ -11,7 +11,7 @@ const ChatInput = ({ id }) => {
         setMessage(e.target.value)
     }
     const handleSendClick = () => {
-        dispatch(sendMessage(message, id))
+        dispatch(sendMessage(message, id, JSON.parse(localStorage.getItem('auth')).userId))
         setMessage('')
     }
     return (
