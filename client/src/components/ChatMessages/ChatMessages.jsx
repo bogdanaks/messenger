@@ -9,7 +9,6 @@ const ChatMessages = ({ id }) => {
     const [socketMsg, setSocketMsg] = useState()
     const dispatch = useDispatch()
     const messages = useSelector(state => state.chats.messages)
-
     useEffect(() => {
         dispatch(initMessages(id))
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,7 +26,10 @@ const ChatMessages = ({ id }) => {
                 <ul>
                     {messages.map((item, indx) => (
                         <li key={indx}>
-                            <div className="row messagesBlock__message messageSelf">
+                            <div className={item.userId === JSON.parse(localStorage.getItem('auth')).userId 
+                                            ? "row messagesBlock__message messageSelf"
+                                            : "row messagesBlock__message"
+                                            }>
                                 <div className="row">
                                     <div className="col-8"><div className="col-12 messagesBlock__message__user">{item.userName}</div></div>
                                     <div className="col-4"><div className="messageTime">10:20 pm</div></div>
