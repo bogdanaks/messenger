@@ -1,9 +1,27 @@
-import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE } from "./actionTypes"
+import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE, SET_MESSAGE } from "./actionTypes"
 import socket from '../utils/socket'
 import api from '../utils/axios'
 
 
 // Chats actions
+export function createChat(chatId) {
+    return async dispatch => {
+        try {
+            const chatObj = {
+                chatId,
+                userId: JSON.parse(localStorage.getItem('auth')).userId
+            }
+            await api.post('/api/chat/create', chatObj)
+                .then(res => {
+                    dispatch(getMsgByChatId(res.data.chatId))
+                })
+                .catch(err => alert(err) )
+        } catch (error) {
+            alert(error)
+        }
+    }
+}
+
 export function getChats() {
     return async dispatch => {
         try {
@@ -24,6 +42,7 @@ export function getLastMsgs() {
             getChatsList().then( async (data) => {
                 await api.get(`/api/message/getLastMsg/${data}`)
                 .then(res => {
+                    console.log(res.data)
                     dispatch({ type: GET_LAST_MSG, payload: res.data })
                     res.data.forEach((el) => {
                         socket.joinChat(el.chatId)
@@ -53,25 +72,25 @@ export function getMsgByChatId(chatId) {
     }
 }
 
-export function createChat(chatId) {
+export function sendMessage(text, id) {
     return async dispatch => {
+        const msgObj = {
+            chatId: id,
+            userId: JSON.parse(localStorage.getItem('auth')).userId,
+            userName: JSON.parse(localStorage.getItem('auth')).name,
+            text
+        } 
         try {
-            const chatObj = {
-                chatId,
-                userId: JSON.parse(localStorage.getItem('auth')).userId
-            }
-            await api.post('/api/chat/create', chatObj)
-                .then(res => {
-                    dispatch(getMsgByChatId(res.data.chatId))
-                })
-                .catch(err => alert(err) )
+            await api.post('/api/message/sendMessage', msgObj)
+            .then(res => {
+                dispatch({ type: SET_MESSAGE, payload: res.data })
+                // socket.joinChat(res.data[0].chatId)
+            })
         } catch (error) {
             alert(error)
         }
     }
 }
-
-
 
 
 
