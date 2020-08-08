@@ -1,4 +1,4 @@
-import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE, SET_MESSAGE } from "./actionTypes"
+import { GET_CHATS, GET_LAST_MSG, GET_LAST_MSG_ONE, SET_MESSAGE, INIT_MESSAGE } from "./actionTypes"
 import socket from '../utils/socket'
 import api from '../utils/axios'
 
@@ -42,11 +42,10 @@ export function getLastMsgs() {
             getChatsList().then( async (data) => {
                 await api.get(`/api/message/getLastMsg/${data}`)
                 .then(res => {
-                    console.log(res.data)
                     dispatch({ type: GET_LAST_MSG, payload: res.data })
-                    res.data.forEach((el) => {
-                        socket.joinChat(el.chatId)
-                    })
+                    // res.data.forEach((el) => {
+                        // socket.joinChat(el.chatId)
+                    // })
                 })
                 .catch(err => alert(err))
             })
@@ -62,8 +61,23 @@ export function getMsgByChatId(chatId) {
         try {
             await api.get(`/api/message/getMsgById/${chatId}`)
             .then(res => {
-                dispatch({ type: GET_LAST_MSG_ONE, payload: res.data })
-                socket.joinChat(res.data[0].chatId)
+                dispatch({ type: SET_MESSAGE, payload: res.data })
+                // socket.joinChat(res.data[0].chatId)
+            })
+            .catch(err => alert(err))
+        } catch (err) {
+            alert(err)
+        }
+    }
+}
+
+export function initMessages(chatId) {
+    return async dispatch => {
+        try {
+            await api.get(`/api/message/getMsgById/${chatId}`)
+            .then(res => {
+                dispatch({ type: INIT_MESSAGE, payload: res.data })
+                // socket.joinChat(res.data[0].chatId)
             })
             .catch(err => alert(err))
         } catch (err) {
@@ -79,7 +93,7 @@ export function sendMessage(text, id) {
             userId: JSON.parse(localStorage.getItem('auth')).userId,
             userName: JSON.parse(localStorage.getItem('auth')).name,
             text
-        } 
+        }
         try {
             await api.post('/api/message/sendMessage', msgObj)
             .then(res => {
