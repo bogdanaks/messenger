@@ -81,7 +81,7 @@ export function initMessages(chatId) {
         try {
             const response = await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
             const inChats = response.data.inChats
-            if(inChats.includes(Number(chatId))) {
+            if(inChats.indexOf(Number(chatId))+1) {
                 await api.get(`/api/message/getMsgById/${chatId}`)
                 .then(res => {
                     dispatch({ type: INIT_MESSAGE, payload: res.data })
