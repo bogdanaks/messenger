@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { sendMessage, initMessages } from '../../redux/actions'
+import { setLastMessageStore, setMessageStore, initMessages } from '../../redux/actions'
 import socket from '../../utils/socket'
 import './styles.scss'
 
@@ -18,7 +18,11 @@ const ChatMessages = ({ id }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     useEffect(() => {
-        if(socketMsg) sendMessage(socketMsg)
+        if(socketMsg) {
+            if(socketMsg.chatId === id) dispatch(setMessageStore(socketMsg))
+            dispatch(setLastMessageStore(socketMsg))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socketMsg])
     return (
         <div className="wrapperChatMessages">
