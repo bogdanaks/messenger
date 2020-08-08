@@ -6,7 +6,6 @@ import { createChat } from '../../redux/actions'
 import './styles.scss'
 
 import usersImg from '../../assets/users.png'
-import userAddImg from '../../assets/userAdd.png'
 import exitImg from '../../assets/exit.png'
 
 const ChatHeader = ({ id }) => {
@@ -40,9 +39,6 @@ const ChatHeader = ({ id }) => {
                 <div className="col-4 usersBtns">
                     <div className="usersBtns__users">
                         {id && <img src={usersImg} alt="Users"/>}
-                    </div>
-                    <div className="usersBtns__userAdd">
-                        {id && <img className="" src={userAddImg} alt="UserAdd"/>}
                     </div>
                 </div>
             </div>

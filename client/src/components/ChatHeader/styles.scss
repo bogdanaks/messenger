@@ -76,21 +76,6 @@
                     cursor: pointer;
                 }
             }
-            &__userAdd {
-                display: flex;
-                width: 32px;
-                height: 100%;
-                align-items: center;
-                position: relative;
-                margin-left: 20px;
-                img {
-                    position: absolute;
-                    cursor: pointer;
-                    top: 25px;
-                    width: 100%;
-                }
-            }
-
         }
     }
 }
