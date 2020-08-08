@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
-import socket from '../../utils/socket'
-import api from '../../utils/axios'
 
 import './styles.scss'
 
@@ -13,17 +10,19 @@ import ChatInput from '../../components/ChatInput/ChatInput'
 
 const Chats = () => {
     const { id } = useParams()
-    const [usersInChat, setUsersInChat] = useState([])
+    // const [usersInChat, setUsersInChat] = useState([])
 
     useEffect(() => {
-        window.socket = socket
-        api.get(`/api/chat/getUserNamesIn/${id}`)
-            .then(res => {
-                setUsersInChat(res.data)
-            })
-            .catch(err => alert(err))
+        // window.socket = socket
+        // api.get(`/api/chat/getUserNamesIn/${id}`)
+        //     .then(res => {
+        //         setUsersInChat(res.data)
+        //     })
+        //     .catch(err => alert(err))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+
 
     return (
         <div className="wrapperChats">
