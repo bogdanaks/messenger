@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { sendMessage, initMessages } from '../../redux/actions'
 import socket from '../../utils/socket'
-import api from '../../utils/axios'
 import './styles.scss'
 
 const ChatMessages = ({ id }) => {
-    const [messages, setMessages] = useState([])
     const [socketMsg, setSocketMsg] = useState()
+    const dispatch = useDispatch()
+    const messages = useSelector(state => state.chats.messages)
+
     useEffect(() => {
-        api.get(`/api/message/getMsgById/${id}`)
-        .then(res => {
-            setMessages(res.data)
-        })
-        .catch(err => alert(err))
+        dispatch(initMessages(id))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     useEffect(() => {
@@ -20,7 +19,7 @@ const ChatMessages = ({ id }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     useEffect(() => {
-        if(socketMsg) setMessages(prevState => [...prevState, socketMsg])
+        if(socketMsg) sendMessage(socketMsg)
     }, [socketMsg])
     return (
         <div className="wrapperChatMessages">
