@@ -10,6 +10,10 @@ const UsersSchema = new Schema({
         type: String,
         required: true
     },
+    online: {
+        type: Boolean,
+        required: true
+    },
     password: {
         type: String,
         required: true
