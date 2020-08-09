@@ -41,7 +41,7 @@ export function getLastMsgs(history, id) {
         try {
             getChatsList()
             .then( async (data) => {
-                if(data.length) {
+                if(data.includes(Number(id))) {
                     await api.get(`/api/message/getLastMsg/${data}`)
                     .then(res => {
                         dispatch({ type: GET_LAST_MSG, payload: res.data })
