@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 
+import api from '../../utils/axios'
 import './styles.scss'
 
 import ChatHeader from '../../components/ChatHeader/ChatHeader'
@@ -10,6 +11,7 @@ import ChatInput from '../../components/ChatInput/ChatInput'
 
 const Chats = () => {
     const { id } = useParams()
+    const history = useHistory()
     // const [usersInChat, setUsersInChat] = useState([])
 
     useEffect(() => {
@@ -19,6 +21,23 @@ const Chats = () => {
         //         setUsersInChat(res.data)
         //     })
         //     .catch(err => alert(err))
+        
+        const getChat = async () => {
+            console.log(id)
+            try {
+                await api.get(`/api/chat/getChat/`+id)
+                    .then( res => res.data )
+                    .catch(err => {
+                        history.push('/404')
+                    })
+            } catch(err) {
+                alert(err)
+            }
+        }
+        if(id) {
+            getChat()
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
