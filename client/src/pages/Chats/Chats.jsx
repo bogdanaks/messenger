@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 
+import { setUsersOnline, initUsersOnline } from '../../redux/actions'
 import api from '../../utils/axios'
+import socket from '../../utils/socket'
 import './styles.scss'
 
 import ChatHeader from '../../components/ChatHeader/ChatHeader'
@@ -9,10 +12,12 @@ import ChatList from '../../components/ChatList/ChatList'
 import ChatMessages from '../../components/ChatMessages/ChatMessages'
 import ChatInput from '../../components/ChatInput/ChatInput'
 
+
+
 const Chats = () => {
     const { id } = useParams()
     const history = useHistory()
-
+    const dispatch = useDispatch()
     useEffect(() => {
         const getChat = async () => {
             try {
@@ -25,15 +30,13 @@ const Chats = () => {
                 alert(err)
             }
         }
+        socket.leaveChat(dispatch, setUsersOnline)
         if(id) {
             getChat()
+            socket.getOnlineInChat(dispatch, initUsersOnline)
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-
-
     return (
         <div className="wrapperChats">
             <div className="container-fluid p-0">

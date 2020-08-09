@@ -1,4 +1,6 @@
 export const GET_USERS_IN_CHAT  = 'CHAT/GET_USERS_IN_CHAT'
+export const INIT_USERS_ONLINE  = 'CHAT/INIT_USERS_ONLINE'
+export const SET_USERS_ONLINE   = 'CHAT/SET_USERS_ONLINE'
 export const GET_LAST_MSG       = 'CHAT/GET_LAST_MSG'
 export const SET_LAST_MSG       = 'CHAT/SET_LAST_MSG'
 

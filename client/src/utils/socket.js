@@ -2,15 +2,29 @@ import io from 'socket.io-client'
 
 let socket = io()
 
-const leaveChat = (chatId) => {
-    socket.emit('CHAT:LEAVE', {
-        chatId
+const leaveChat = (dispatch, action) => {
+    socket.on('CHAT:LEAVE', (payload) => {
+        dispatch(action(payload))
     })
 }
 
-const joinChat = (chatId) => {
+const joinChat = (chatId, userId) => {
     socket.emit('CHAT:JOIN', {
-        chatId
+        chatId,
+        userId
+    })
+}
+
+const getOnlineInChat = (dispatch, action) => {
+    socket.on('CHAT:INIT_ONLINE', (payload) => {
+        console.log(payload)
+        dispatch(action(payload))
+    })
+}
+
+const setOnlineInChat = (state) => {
+    socket.emit('CHAT:SET_ONLINE', (payload) => {
+        state(payload)
     })
 }
 
@@ -25,4 +39,4 @@ const sendMessage = (msg) => {
 }
 
 
-export default { leaveChat, joinChat, getMessage, sendMessage }
+export default { leaveChat, joinChat, getOnlineInChat, setOnlineInChat, getMessage, sendMessage }

@@ -14,13 +14,25 @@ const PORT = process.env.PORT || config.get('port')
 app.use(cors())
 app.use(express.json())
 
+// Import Chat Model
+const Chats = require('./models/Chats')
+
 //socetio
+let allClients = []
 io.on('connection', (socket) => {
     console.log("Socket io connection")
-
-    socketMW(socket)
+    socketMW(socket, allClients)
 
     socket.on('disconnect', () => {
+        function filterBysId(arr, sId) {
+            arr.filter(function(item, i, arr) {
+                if(item.sId === sId) {
+                    allClients.splice(i, 1)
+                }
+            })
+        }
+        filterBysId(allClients, socket.id)
+        io.emit('CHAT:LEAVE', allClients)
         console.log('user disconnected')
     })
 })
