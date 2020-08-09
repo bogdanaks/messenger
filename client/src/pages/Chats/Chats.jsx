@@ -23,7 +23,6 @@ const Chats = () => {
         //     .catch(err => alert(err))
         
         const getChat = async () => {
-            console.log(id)
             try {
                 await api.get(`/api/chat/getChat/`+id)
                     .then( res => res.data )
