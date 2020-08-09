@@ -26,7 +26,7 @@ const ChatHeader = ({ id }) => {
     }
     return (        
         <div className="row chatList__header no-gutters">
-            {isChatUsers && <ChatUsers />}
+            {isChatUsers && <ChatUsers id={id}/>}
             <div className="col-3 chatTitle">
                 <h4>Chats</h4>
                 <div className="chatTitle__createChat">
