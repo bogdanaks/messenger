@@ -26,6 +26,17 @@ router.get('/getUserNamesIn/:chatId', async (req, res) => {
     }
 })
 
+router.get('/getChat/:chatId', async (req, res) => {
+    try {
+        const chat = await Chats.findOne({chatId: req.params.chatId})
+        if(!chat) return res.status(400).send('Chat is not found')
+
+        res.send(chat)
+    } catch(err) {
+        res.status(400).send(err)
+    }
+})
+
 router.post('/create', async (req, res) => {
     try {
         const user = await Users.findOne({userId: req.body.userId})
