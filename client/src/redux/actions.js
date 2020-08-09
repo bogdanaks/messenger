@@ -1,4 +1,4 @@
-import { GET_CHATS, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from "./actionTypes"
+import { GET_USERS_IN_CHAT, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from "./actionTypes"
 import socket from '../utils/socket'
 import api from '../utils/axios'
 
@@ -22,13 +22,13 @@ export function createChat(chatId) {
     }
 }
 
-export function getChats() {
+export function getUsersInChats(chatId) {
     return async dispatch => {
         try {
-            await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
-                .then( res => (
-                    dispatch({ type: GET_CHATS, payload: res.data.inChats })
-                ))
+            await api.get(`/api/chat/getUsersInChat/${chatId}`)
+                .then( res => {
+                    dispatch({ type: GET_USERS_IN_CHAT, payload: res.data })
+                })
                 .catch(err => alert(err))
         } catch(err) {
             alert(err)

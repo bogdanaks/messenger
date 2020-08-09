@@ -1,15 +1,15 @@
-import { GET_CHATS, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from './actionTypes'
+import { GET_USERS_IN_CHAT, GET_LAST_MSG, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from './actionTypes'
 
 const initialState = {
-    chatList: [],
+    usersInChat: [],
     lastMsgList: [],
     messages: []
 }
 
 export const chatsReducer = (state = initialState, action) => {
     switch(action.type) {
-        case GET_CHATS:
-            return { ...state, chatList: state.chatList.concat(action.payload) }
+        case GET_USERS_IN_CHAT:
+            return { ...state, usersInChat: action.payload }
         case GET_LAST_MSG:
             return { ...state, lastMsgList: state.lastMsgList.concat(action.payload) }
         case SET_LAST_MSG:            
