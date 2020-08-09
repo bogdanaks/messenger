@@ -37,6 +37,17 @@ router.get('/getChat/:chatId', async (req, res) => {
     }
 })
 
+router.get('/getUsersInChat/:chatId', async (req, res) => {
+    try {
+        await Chats.findOne({chatId: req.params.chatId}, (err, items) => {
+            if(err) return res.status(404).send(err)
+            return res.send(items.users)
+        })
+    } catch(err) {
+        res.status(400).send(err)
+    }
+})
+
 router.post('/create', async (req, res) => {
     try {
         const user = await Users.findOne({userId: req.body.userId})
