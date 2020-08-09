@@ -12,16 +12,8 @@ import ChatInput from '../../components/ChatInput/ChatInput'
 const Chats = () => {
     const { id } = useParams()
     const history = useHistory()
-    // const [usersInChat, setUsersInChat] = useState([])
 
     useEffect(() => {
-        // window.socket = socket
-        // api.get(`/api/chat/getUserNamesIn/${id}`)
-        //     .then(res => {
-        //         setUsersInChat(res.data)
-        //     })
-        //     .catch(err => alert(err))
-        
         const getChat = async () => {
             try {
                 await api.get(`/api/chat/getChat/`+id)
