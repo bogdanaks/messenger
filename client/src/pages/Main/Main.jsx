@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { createChat } from '../../redux/actions2'
+import { createChat } from '../../redux/actions'
 import "./styles.scss"
 
 const Main = () => {

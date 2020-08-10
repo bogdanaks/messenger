@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 
-import { registerUser } from '../../redux/actions2'
+import { registerUser } from '../../redux/actions'
 import './styles.scss'
 
 const Auth = () => {

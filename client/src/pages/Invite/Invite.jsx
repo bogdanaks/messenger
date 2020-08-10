@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { getChat, enterChat } from '../../redux/actions2'
+import { getChat, enterChat } from '../../redux/actions'
 
 const Invite = () => {
     const history = useHistory()

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { getMessages } from '../../redux/actions2'
+import { getMessages } from '../../redux/actions'
 import './styles.scss'
 
 const ChatList = ({ id }) => {
@@ -29,7 +29,7 @@ const ChatList = ({ id }) => {
                                     <div className="col-8">
                                         <span className="chatId">#{item.chatId}</span>
                                     </div>
-                                    <div className="col-4 chatTime text-right">10:20 pm</div>
+                                    <div className="col-4 chatTime text-right">{new Date(item.lastMsg.date).getHours()}:{new Date(item.lastMsg.date).getMinutes()}:{new Date(item.lastMsg.date).getSeconds()}</div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12 userName">{item.lastMsg.userName}</div>

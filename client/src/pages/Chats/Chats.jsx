@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { getChatsUser, getMessages, getChat } from '../../redux/actions2'
+import { getChatsUser, getMessages, getChat } from '../../redux/actions'
 import './styles.scss'
 // import store from '../../redux/store'
 

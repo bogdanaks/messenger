@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
 
-import { createChat, getMessages } from '../../redux/actions2'
+import { createChat, getMessages } from '../../redux/actions'
 import './styles.scss'
 
 import usersImg from '../../assets/users.png'
