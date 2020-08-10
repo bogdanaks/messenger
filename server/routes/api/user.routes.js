@@ -28,15 +28,6 @@ router.get('/getChats/:userId', async (req, res) => {
     }
 })
 
-router.get('/getNameById/:userId', async (req, res) => {
-    try {
-        const user = await Users.findOne({userId: req.params.userId})
-        res.send({name: user.name})
-    } catch(err) {
-        res.status(400).send(err)
-    }
-})
-
 router.post('/login', async (req, res) => {
     try {
         // Checking if login exists

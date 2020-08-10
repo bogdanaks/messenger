@@ -8,24 +8,6 @@ const Users = require('../../models/Users')
 // Import Message Model
 const Messages = require('../../models/Messages')
 
-// router.get('/getUserNamesIn/:chatId', async (req, res) => {
-//     try {
-//         await Chats.find({chatId: req.params.chatId}, (err, items) => {
-//             if(err) return res.status(404).send(err)
-
-//             let userNames = []
-//             items.forEach(( el ) => {
-//                 el.users.forEach(el => {
-//                     userNames.push(el.name)
-//                 })
-//             })
-//             return res.send(userNames)
-//         })
-//     } catch(err) {
-//         res.status(400).send(err)
-//     }
-// })
-
 router.get('/getChat/:chatId', async (req, res) => {
     try {
         const chat = await Chats.findOne({ chatId: req.params.chatId })
