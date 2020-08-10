@@ -8,35 +8,33 @@ const leaveChat = (dispatch, action) => {
     })
 }
 
-const joinChat = (chatId, userId) => {
+const joinChat = (chatId, userId, userName) => {
     socket.emit('CHAT:JOIN', {
         chatId,
-        userId
+        userId,
+        userName
     })
 }
 
-const getOnlineInChat = (dispatch, action) => {
-    socket.on('CHAT:INIT_ONLINE', (payload) => {
-        console.log(payload)
+const getOnlineUsers = (id) => {
+    socket.emit('CHAT:GET_ONLINE', {chatId: id})
+}
+
+const setOnlineUsers = (dispatch, action) => {
+    socket.on('CHAT:SET_ONLINE', (payload) => {
         dispatch(action(payload))
     })
 }
 
-const setOnlineInChat = (state) => {
-    socket.emit('CHAT:SET_ONLINE', (payload) => {
-        state(payload)
-    })
-}
-
 const getMessage = (state) => {
-    socket.on('getMessage', (payload) => {
+    socket.on('CHAT:GET_MESSAGE', (payload) => {
         state(payload)
     })
 }
 
 const sendMessage = (msg) => {
-    socket.emit('sendMessage', msg)
+    socket.emit('CHAT:SEND_MESSAGE', msg)
 }
 
 
-export default { leaveChat, joinChat, getOnlineInChat, setOnlineInChat, getMessage, sendMessage }
+export default { leaveChat, joinChat, getOnlineUsers, setOnlineUsers, getMessage, sendMessage }

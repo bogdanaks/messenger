@@ -28,11 +28,11 @@ io.on('connection', (socket) => {
             arr.filter(function(item, i, arr) {
                 if(item.sId === sId) {
                     allClients.splice(i, 1)
+                    socket.to(item.chatId).emit('CHAT:SET_ONLINE', allClients)
                 }
             })
         }
         filterBysId(allClients, socket.id)
-        io.emit('CHAT:LEAVE', allClients)
         console.log('user disconnected')
     })
 })
@@ -46,6 +46,8 @@ app.use('/api/message', require('./routes/api/message.routes'))
 async function start() {
     try {
         await mongoose.connect(config.get('mongoUri'), {useNewUrlParser: true, useUnifiedTopology: true})
+            .then((res) => console.log(`Mongo start success`))
+            .catch((err) => console.log(`Mongo error: ${err}`))
         await server.listen(PORT, () => console.log(`Server is running on port: ${PORT}`))
     } catch (error) {
         console.log(`Server error: ${error}`)
