@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { setUsersOnline, initUsersOnline } from '../../redux/actions'
-import api from '../../utils/axios'
-import socket from '../../utils/socket'
+import { getChatsUser, getMessages, getChat } from '../../redux/actions2'
 import './styles.scss'
+// import store from '../../redux/store'
 
 import ChatHeader from '../../components/ChatHeader/ChatHeader'
 import ChatList from '../../components/ChatList/ChatList'
@@ -16,24 +15,28 @@ import ChatInput from '../../components/ChatInput/ChatInput'
 
 const Chats = () => {
     const { id } = useParams()
-    const history = useHistory()
     const dispatch = useDispatch()
+    const history = useHistory()
+    const messages = useSelector(state => state.chats.messages)
     useEffect(() => {
-        const getChat = async () => {
-            try {
-                await api.get(`/api/chat/getChat/`+id)
-                    .then( res => res.data )
-                    .catch(err => {
-                        history.push('/404')
+        if(!localStorage.getItem('auth')) {
+            history.push('/login')
+        } else {
+            dispatch(getChatsUser(JSON.parse(localStorage.getItem('auth')).userId))
+            if(id) {
+                const res = getChat(id, JSON.parse(localStorage.getItem('auth')).userId)
+                res
+                    .then(res => {
+                        if(res === 'ok') {
+                            dispatch(getMessages(id))
+                        } else if(res === 'invite'){
+                            history.push('/invite/'+id)
+                        } else if(res === '404'){
+                            history.push('/404')
+                        }
                     })
-            } catch(err) {
-                alert(err)
+                    .catch(err=> console.log(err))
             }
-        }
-        socket.leaveChat(dispatch, setUsersOnline)
-        if(id) {
-            getChat()
-            socket.getOnlineInChat(dispatch, initUsersOnline)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -47,10 +50,10 @@ const Chats = () => {
                     </div>
                     <div className="col-9">
                         <div className="container-fluid">
-                            {id ? 
+                            {messages.length ? 
                                 <>
-                                <div className="row"><ChatMessages id={id} /></div>
-                                <div className="row"><ChatInput id={id} /></div>
+                                    <div className="row"><ChatMessages id={id} /></div>
+                                    <div className="row"><ChatInput id={id} /></div>
                                 </>
                                 :
                                 <div className="chatNot">

@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import api from '../../utils/axios'
+import { getChat, enterChat } from '../../redux/actions2'
 
 const Invite = () => {
     const history = useHistory()
     const { chatId } = useParams()
     const [inChat, setInChat] = useState(false)
     useEffect( () => {
-        const userId = JSON.parse(localStorage.getItem('auth')).userId
-        const fetchData = async () => {      
+        const fetchData = async () => {
             try {
-                await api.get(`/api/user/getChats/`+userId)
-                    .then( res => {
-                        if(res.data.inChats.indexOf(chatId)+1) {
-                            setInChat(true)
-                        } else {
-                            setInChat(false)
-                        }
-                    })
-                    .catch(err => alert(err))
-            } catch(err) {
-                alert(err)
+                const res = getChat(chatId, JSON.parse(localStorage.getItem('auth')).userId)
+                res.then((res) => {
+                    if(res === '404') {
+                        history.push('/404')
+                    } else if(res === 'ok'){
+                        setInChat(true)
+                    }
+                })
+                .catch(err => console.log(err)) 
+            } catch (error) {
+                
             }
         }
         fetchData()
@@ -31,15 +30,7 @@ const Invite = () => {
     const handleEnterClick = async (e) => {
         e.preventDefault()
         const userId = JSON.parse(localStorage.getItem('auth')).userId
-        try {
-            await api.post('/api/chat/enterchat', { userId, chatId })
-                .then( res => {
-                    if(res.statusText === 'OK') history.push('/chats/'+chatId)
-                })
-                .catch(err => alert(err))
-        } catch(err) {
-            alert(err)
-        }
+        enterChat(chatId, userId, history)
     }
     const handleOpenClick = () => {
         history.push('/chats/'+chatId)

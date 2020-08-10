@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, Link } from 'react-router-dom'
-import api from '../../utils/axios'
 
+import { registerUser } from '../../redux/actions2'
 import './styles.scss'
 
 const Auth = () => {
@@ -16,17 +16,7 @@ const Auth = () => {
     }, [])
     const handleBtnClick = async (e) => {
         e.preventDefault()
-        const userObj = {
-            userId: Date.now(),
-            name,
-            password
-        }
-        await api.post('/api/user/register', userObj)
-            .then(res => {
-                localStorage.setItem('auth', JSON.stringify({userId: res.data.userId, name: res.data.name}))
-                history.push('/chats')
-            })
-            .catch(err => alert(err.response.request.response))
+        registerUser(name, password, history)
     }
     return (
         <div className="container d-flex flex-column">

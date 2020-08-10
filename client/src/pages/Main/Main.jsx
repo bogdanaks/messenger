@@ -1,26 +1,21 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import api from '../../utils/axios'
 
+import { createChat } from '../../redux/actions2'
 import "./styles.scss"
 
 const Main = () => {
     const history = useHistory()
+    const dispatch = useDispatch()
     useEffect(() => {
         if(!localStorage.getItem('auth')) history.push('/login')
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleCreateChat = async (e) => {
         e.preventDefault()
-        const chatObj = {
-            chatId: Date.now(),
-            userId: JSON.parse(localStorage.getItem('auth')).userId
-        }
-        await api.post('/api/chat/create', chatObj)
-            .then(res => {
-                history.push('/chats/' + res.data.chatId)
-            })
-            .catch(err => alert(err) )
+        const chatId = Date.now()
+        dispatch(createChat(history, chatId))
     }
     return (
         <div className="container d-flex flex-column">

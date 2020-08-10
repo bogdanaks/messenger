@@ -1,33 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
-import { setLastMessageStore, setMessageStore, initMessages } from '../../redux/actions'
-import socket from '../../utils/socket'
+// import { setLastMessageStore, setMessageStore, initMessages } from '../../redux/actions'
+// import socket from '../../utils/socket'
 import './styles.scss'
 
 const ChatMessages = ({ id }) => {
-    const [socketMsg, setSocketMsg] = useState()
-    const dispatch = useDispatch()
+    // const [socketMsg, setSocketMsg] = useState()
     const messages = useSelector(state => state.chats.messages)
     const chatRef = useRef()
     useEffect(() => {
-        dispatch(initMessages(id))
+        // socket.getMessage(setSocketMsg)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    useEffect(() => {
-        socket.getMessage(setSocketMsg)
+
+    // useEffect(() => {
+        // if(socketMsg) {
+        //     if(socketMsg.chatId === id) dispatch(setMessageStore(socketMsg))
+        //     dispatch(setLastMessageStore(socketMsg))
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-    useEffect(() => {
-        if(socketMsg) {
-            if(socketMsg.chatId === id) dispatch(setMessageStore(socketMsg))
-            dispatch(setLastMessageStore(socketMsg))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [socketMsg])
-    useEffect(() => {
-        chatRef.current.scrollTop = 99999999
-    }, [messages])
+    // }, [socketMsg])
+    // useEffect(() => {
+        // chatRef.current.scrollTop = 99999999
+    // }, [messages])
     return (
         <div className="wrapperChatMessages">
             <div className="container-fluid messagesBlock">

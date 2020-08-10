@@ -9,10 +9,14 @@
         display: flex;
         flex-direction: row;
         border-right: 1px solid #e5e9f2;
-        h4 {
+        .chatsLink {
             margin-left: 15px;
             margin-top: 24px;
             margin-bottom: 24px;
+            color: #787d83;
+            font-size: 24px;
+            font-weight: 600;
+            text-decoration: none;
         }
         &__createChat {
             display: flex;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, Link } from 'react-router-dom'
-import api from '../../utils/axios'
 
+import { loginUser } from '../../redux/actions2'
 import './styles.scss'
 
 const Auth = () => {
@@ -15,17 +15,8 @@ const Auth = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleBtnClick = async (e) => {
-        e.preventDefault()
-        const userObj = {
-            name,
-            password
-        }
-        await api.post('/api/user/login', userObj)
-            .then(res => {
-                localStorage.setItem('auth', JSON.stringify({userId: res.data.userId, name: res.data.name}))
-                history.push('/chats')
-            })
-            .catch(err => alert(err.response.request.response))        
+        e.preventDefault()     
+        loginUser(name, password, history)       
     }
     return (
         <div className="container d-flex flex-column">

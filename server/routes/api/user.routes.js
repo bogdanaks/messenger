@@ -7,12 +7,24 @@ const Users = require('../../models/Users')
 // Import Chats Model
 const Chats = require('../../models/Chats')
 
+// Import Messages Model
+const Messages = require('../../models/Messages')
+
 router.get('/getChats/:userId', async (req, res) => {
+    function getUnique(arr, comp) {
+        const unique =  arr.map(e => e[comp])
+            .map((e, i, final) => final.indexOf(e) === i && i)
+            .filter((e) => arr[e]).map(e => arr[e])
+        return unique
+    }
     try {
         const user = await Users.findOne({userId: req.params.userId})
-        res.send({inChats: user.inChats})
+        const chats = await Chats.find({ chatId: { "$in" : user.inChats} })
+        const msgs = await Messages.find({ 'chatId': { $in: user.inChats } }).sort({createdAt: -1})
+        if(!msgs) return res.status(400).send('Messages is not found')
+        res.send({chats: chats, lastMsgs: getUnique(msgs, 'chatId')})
     } catch(err) {
-        res.status(400).send(err)
+        res.status(400).send('Unknown error')
     }
 })
 

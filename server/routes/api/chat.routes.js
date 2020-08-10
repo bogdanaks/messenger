@@ -8,41 +8,30 @@ const Users = require('../../models/Users')
 // Import Message Model
 const Messages = require('../../models/Messages')
 
-router.get('/getUserNamesIn/:chatId', async (req, res) => {
-    try {
-        await Chats.find({chatId: req.params.chatId}, (err, items) => {
-            if(err) return res.status(404).send(err)
+// router.get('/getUserNamesIn/:chatId', async (req, res) => {
+//     try {
+//         await Chats.find({chatId: req.params.chatId}, (err, items) => {
+//             if(err) return res.status(404).send(err)
 
-            let userNames = []
-            items.forEach(( el ) => {
-                el.users.forEach(el => {
-                    userNames.push(el.name)
-                })
-            })
-            return res.send(userNames)
-        })
-    } catch(err) {
-        res.status(400).send(err)
-    }
-})
+//             let userNames = []
+//             items.forEach(( el ) => {
+//                 el.users.forEach(el => {
+//                     userNames.push(el.name)
+//                 })
+//             })
+//             return res.send(userNames)
+//         })
+//     } catch(err) {
+//         res.status(400).send(err)
+//     }
+// })
 
 router.get('/getChat/:chatId', async (req, res) => {
     try {
-        const chat = await Chats.findOne({chatId: req.params.chatId})
+        const chat = await Chats.findOne({ chatId: req.params.chatId })
         if(!chat) return res.status(400).send('Chat is not found')
 
-        res.send(chat)
-    } catch(err) {
-        res.status(400).send(err)
-    }
-})
-
-router.get('/getUsersInChat/:chatId', async (req, res) => {
-    try {
-        await Chats.findOne({chatId: req.params.chatId}, (err, items) => {
-            if(err) return res.status(404).send(err)
-            return res.send(items.users)
-        })
+        return res.send(chat)
     } catch(err) {
         res.status(400).send(err)
     }
@@ -53,8 +42,9 @@ router.post('/create', async (req, res) => {
         const user = await Users.findOne({userId: req.body.userId})
         const newChat = new Chats({
             chatId: req.body.chatId,
-            users: user
+            users: req.body.userId
         })
+        await newChat.save()
         const newMsg = new Messages({
             chatId: req.body.chatId,
             userId: req.body.userId,
@@ -66,7 +56,7 @@ router.post('/create', async (req, res) => {
         await user.inChats.push(req.body.chatId)
         user.save()
 
-        await newChat.save().then(chat => res.send(chat))
+        return res.send(newChat)
     } catch(err) {
         res.status(400).send(err)
     }
@@ -79,8 +69,10 @@ router.post('/enterchat', async (req, res) => {
         await user.save()
 
         const chat = await Chats.findOne({chatId: req.body.chatId})
-        chat.users.push(user)
-        await chat.save().then(chat => res.send(chat))
+        chat.users.push(req.body.userId)
+        await chat.save()
+
+        return res.send(chat)
     } catch(err) {
         res.status(400).send(err)
     }

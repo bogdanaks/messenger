@@ -6,9 +6,9 @@ const ChatsSchema = new Schema({
         type: String,
         required: true
     },
-    users: {
-        type: Array
-    },
+    users: [{
+        type: Number
+    }],
 }, { timestamps: true })
 
 module.exports = Chat = mongoose.model('chats', ChatsSchema)

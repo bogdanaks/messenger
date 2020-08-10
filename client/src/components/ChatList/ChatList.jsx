@@ -1,29 +1,24 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { getLastMsgs, initMessages } from '../../redux/actions'
+import { getMessages } from '../../redux/actions2'
 import './styles.scss'
 
 const ChatList = ({ id }) => {
     const dispatch = useDispatch()
-    const lastMsgList = useSelector(state => state.chats.lastMsgList)
-    const history = useHistory()
-    
-    useEffect(() => {
-        dispatch(getLastMsgs(history, id))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const chatList = useSelector(state => state.chats.chatsUser)
+    const history = useHistory()    
     const handleChatClick = (chatId) => {
         history.push('/chats/'+chatId)
-        dispatch(initMessages(chatId))
+        dispatch(getMessages(chatId))
     }
     return (
         <div className="wrapperChatList">
             <div className="container-fluid p-0">
                 <div className="row chatList__list no-gutters mh-70">
                     <ul className="chatList__content">
-                        {lastMsgList.map((item , index) => (
+                        {chatList.map((item , index) => (
                         <li
                             className={item.chatId === id ? "chatList__list__item active" : "chatList__list__item"} 
                             key={item.chatId} 
@@ -37,11 +32,11 @@ const ChatList = ({ id }) => {
                                     <div className="col-4 chatTime text-right">10:20 pm</div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-12 userName">{item.userName}</div>
+                                    <div className="col-12 userName">{item.lastMsg.userName}</div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="userMessage">{item.text}</p>
+                                        <p className="userMessage">{item.lastMsg.text}</p>
                                     </div>
                                 </div>
                             </div>
