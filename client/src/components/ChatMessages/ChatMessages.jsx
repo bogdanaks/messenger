@@ -1,29 +1,34 @@
-import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useRef, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-// import { setLastMessageStore, setMessageStore, initMessages } from '../../redux/actions'
-// import socket from '../../utils/socket'
+import { setMessageStore, setOnlineUsers } from '../../redux/actions'
+import socket from '../../utils/socket'
 import './styles.scss'
 
 const ChatMessages = ({ id }) => {
-    // const [socketMsg, setSocketMsg] = useState()
+    const [socketMsg, setSocketMsg] = useState()
     const messages = useSelector(state => state.chats.messages)
+    const dispatch = useDispatch()
     const chatRef = useRef()
     useEffect(() => {
-        // socket.getMessage(setSocketMsg)
+        socket.joinChat(id, JSON.parse(localStorage.getItem('auth')).userId, JSON.parse(localStorage.getItem('auth')).name)
+        socket.setOnlineUsers(dispatch, setOnlineUsers)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    useEffect(() => {
+        socket.getMessage(setSocketMsg)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // useEffect(() => {
-        // if(socketMsg) {
-        //     if(socketMsg.chatId === id) dispatch(setMessageStore(socketMsg))
-        //     dispatch(setLastMessageStore(socketMsg))
-        // }
+    useEffect(() => {
+        if(socketMsg) {
+            dispatch(setMessageStore(socketMsg))
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [socketMsg])
-    // useEffect(() => {
-        // chatRef.current.scrollTop = 99999999
-    // }, [messages])
+    }, [socketMsg])
+    useEffect(() => {
+        chatRef.current.scrollTop = 99999999
+    }, [messages])
     return (
         <div className="wrapperChatMessages">
             <div className="container-fluid messagesBlock">
@@ -36,7 +41,7 @@ const ChatMessages = ({ id }) => {
                                             }>
                                 <div className="row">
                                     <div className="col-8"><div className="col-12 messagesBlock__message__user">{item.userName}</div></div>
-                                    <div className="col-4"><div className="messageTime">10:20 pm</div></div>
+                                    <div className="col-4"><div className="messageTime">{new Date(item.date).getHours()}:{new Date(item.date).getMinutes()}:{new Date(item.date).getSeconds()}</div></div>
                                 </div>
                                 <div className="col-12 messagesBlock__message__text">{item.text}</div>
                             </div>

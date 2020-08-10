@@ -1,10 +1,10 @@
-import { GET_USERS_IN_CHAT, GET_LAST_MSG, INIT_USERS_ONLINE, SET_USERS_ONLINE, SET_LAST_MSG, SET_MESSAGE, SET_MESSAGE_STORE, INIT_MESSAGE } from "./actionTypes"
-import socket from '../utils/socket'
-import api from '../utils/axios'
+import { GET_CHATS_USER, INIT_MESSAGE, SET_NEW_MESSAGE, SET_USERS_ONLINE } from "./actionTypes"
 
+import api from '../utils/axios'
+import socket from '../utils/socket'
 
 // Chats actions
-export function createChat(chatId) {
+export function createChat(history, chatId) {
     return async dispatch => {
         try {
             const chatObj = {
@@ -13,7 +13,9 @@ export function createChat(chatId) {
             }
             await api.post('/api/chat/create', chatObj)
                 .then(res => {
-                    dispatch(getMsgByChatId(res.data.chatId))
+                    history.push('/chats/'+res.data.chatId)
+                    dispatch(getChatsUser(chatObj.userId))
+                    dispatch(getMessages(res.data.chatId))
                 })
                 .catch(err => alert(err) )
         } catch (error) {
@@ -21,106 +23,95 @@ export function createChat(chatId) {
         }
     }
 }
-
-export function getUsersInChats(chatId) {
+export async function getChat(chatId, userId) {
+    try {
+        const response = await api.get(`/api/chat/getChat/${chatId}`)
+           .then(async res => {
+                const isChat = await api.get(`/api/user/getChats/${userId}`)
+                .then( res => {
+                    if(res.data.chats.length) {
+                        const isCheck = res.data.chats.filter((el) => Number(el.chatId) === Number(chatId))
+                        if(isCheck.length > 0) {
+                            return 'ok'
+                        } else {
+                            return 'invite'
+                        }
+                    } else {
+                        return 'invite'
+                    }
+                })
+                .catch(err => {
+                    return '404'
+                })
+                return isChat
+           })
+           .catch(err => {
+                return '404'
+           })
+           return response
+    } catch(err) {
+        alert(err)
+    }
+}
+export function getChatsUser(userId) {
     return async dispatch => {
         try {
-            await api.get(`/api/chat/getUsersInChat/${chatId}`)
+            await api.get(`/api/user/getChats/${userId}`)
                 .then( res => {
-                    dispatch({ type: GET_USERS_IN_CHAT, payload: res.data })
+                    res.data.chats.forEach(chat => {
+                        res.data.lastMsgs.forEach(msg => {
+                            if(chat.chatId === msg.chatId) {
+                                chat.lastMsg = msg
+                            }
+                        })
+                    })
+                    dispatch({ type: GET_CHATS_USER, payload: res.data.chats })
                 })
-                .catch(err => alert(err))
+                .catch(err => alert(err.response.request.response))
         } catch(err) {
             alert(err)
         }
     }
 }
-
-export function initUsersOnline(users) {
-    return {
-        type: INIT_USERS_ONLINE,
-        payload: users
+export async function enterChat(chatId, userId, history) {
+    try {
+        await api.post('/api/chat/enterchat', { userId, chatId })
+                .then( res => {
+                    if(res.statusText === 'OK') history.push('/chats/'+chatId)
+                })
+                .catch(err => alert(err))
+    } catch(err) {
+        console.log(err)
     }
 }
 
-export function setUsersOnline(users) {
-    return {
-        type: SET_USERS_ONLINE,
-        payload: users
-    }
-}
-
-export function getLastMsgs(history, id) {
-    return async dispatch => {
-        try {
-            getChatsList()
-            .then( async (data) => {
-                if(data.includes(Number(id))) {
-                    await api.get(`/api/message/getLastMsg/${data}`)
-                    .then(res => {
-                        dispatch({ type: GET_LAST_MSG, payload: res.data })
-                        res.data.forEach((el) => {
-                            socket.joinChat(el.chatId, JSON.parse(localStorage.getItem('auth')).userId)
-                        })
-                    })
-                    .catch(err => {
-                        alert(err)
-                    })
-                } else {
-                    history.push('/invite/'+id)
-                }
-            })
-        } catch (err) {
-            alert(err)
-        }
-    }
-}
-
-export function getMsgByChatId(chatId) {
+// Messages actions
+export function getMessages(chatId) {
     return async dispatch => {
         try {
             await api.get(`/api/message/getMsgById/${chatId}`)
             .then(res => {
-                dispatch({ type: SET_MESSAGE, payload: res.data })
+                dispatch({ type: INIT_MESSAGE, payload: res.data })
             })
-            .catch(err => alert(err))
+            .catch(err => alert(err.response.request.response))
         } catch (err) {
             alert(err)
         }
     }
 }
-
-export function initMessages(chatId) {
-    return async dispatch => {
-        try {
-            const response = await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
-            const inChats = response.data.inChats
-            if(inChats.indexOf(Number(chatId))+1) {
-                await api.get(`/api/message/getMsgById/${chatId}`)
-                .then(res => {
-                    dispatch({ type: INIT_MESSAGE, payload: res.data })
-                })
-                .catch(err => alert(err.response.request.response))
-            }
-        } catch (err) {
-            alert(err.response.request.response)
-        }
-    }
-}
-
-export function sendMessage(text, id, userId) {
+export function sendMessage(text, chatId, userId) {
     return async dispatch => {
         const msgObj = {
-            chatId: id,
+            chatId,
             userId,
             userName: JSON.parse(localStorage.getItem('auth')).name,
-            text
+            text,
+            date: Date.now()
         }
         try {
             await api.post('/api/message/sendMessage', msgObj)
             .then(res => {
-                dispatch({ type: SET_MESSAGE_STORE, payload: res.data })
-                dispatch({ type: SET_LAST_MSG, payload: res.data })
+                dispatch(setMessageStore(msgObj))
                 socket.sendMessage(res.data)
             })
         } catch (error) {
@@ -130,28 +121,48 @@ export function sendMessage(text, id, userId) {
 }
 export function setMessageStore(msg) {
     return {
-        type: SET_MESSAGE_STORE,
-        payload: msg
-    }
-}
-export function setLastMessageStore(msg) {
-    return {
-        type: SET_LAST_MSG,
+        type: SET_NEW_MESSAGE,
         payload: msg
     }
 }
 
-
-
-
-const getChatsList = async () => {
+// Users actions
+export async function registerUser(name, password, history) {
     try {
-        return await api.get(`/api/user/getChats/${JSON.parse(localStorage.getItem('auth')).userId}`)
-            .then( res => {
-                return res.data.inChats
+        const userObj = {
+            userId: Date.now(),
+            name,
+            password
+        }
+        await api.post('/api/user/register', userObj)
+            .then(res => {
+                localStorage.setItem('auth', JSON.stringify({userId: res.data.userId, name: res.data.name}))
+                history.push('/chats')
             })
-            .catch(err => alert(err))
+            .catch(err => alert(err.response.request.response))
     } catch(err) {
-        alert(err)
+        console.log(err)
+    }
+}
+export async function loginUser(name, password, history) {
+    try {
+        const userObj = {
+            name,
+            password
+        }
+        await api.post('/api/user/login', userObj)
+            .then(res => {
+                localStorage.setItem('auth', JSON.stringify({userId: res.data.userId, name: res.data.name}))
+                history.push('/chats')
+            })
+            .catch(err => alert(err.response.request.response))    
+    } catch(err) {
+        console.log(err)
+    }
+}
+export function setOnlineUsers(users) {
+    return {
+        type: SET_USERS_ONLINE,
+        payload: users
     }
 }
