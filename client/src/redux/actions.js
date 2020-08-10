@@ -9,7 +9,8 @@ export function createChat(history, chatId) {
         try {
             const chatObj = {
                 chatId,
-                userId: JSON.parse(localStorage.getItem('auth')).userId
+                userId: JSON.parse(localStorage.getItem('auth')).userId,
+                date: Date.now()
             }
             await api.post('/api/chat/create', chatObj)
                 .then(res => {

@@ -31,7 +31,8 @@ router.post('/create', async (req, res) => {
             chatId: req.body.chatId,
             userId: req.body.userId,
             userName: 'Bot',
-            text: 'Chat created'
+            text: 'Chat created',
+            date: req.body.date
         })
         await newMsg.save()
 
