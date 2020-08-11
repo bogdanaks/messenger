@@ -5,7 +5,8 @@ import { GET_CHATS_USER,
 
 const initialState = {
     chatsUser: [],
-    messages: []    
+    messages: [],
+    usersOnline: []
 }
 
 export const chatsReducer = (state = initialState, action) => {
@@ -19,13 +20,16 @@ export const chatsReducer = (state = initialState, action) => {
             return { ...state, messages: [...action.payload] }
         case SET_NEW_MESSAGE:
             let newArr = state.chatsUser.map((chat) => {
-                if(chat.chatId === action.payload.chatId) {
-                    chat.lastMsg = action.payload
+                if(chat.chatId === action.payload.msg.chatId) {
+                    chat.lastMsg = action.payload.msg
                     return chat
                 }
                 return chat
             })
-            return { ...state, chatsUser: newArr, messages: state.messages.concat(action.payload) }
+            return { ...state,
+                chatsUser: newArr,
+                messages: action.payload.chatId === action.payload.msg.chatId ? state.messages.concat(action.payload.msg) : [...state.messages]
+            }
         default: return state
     }
 }

@@ -65,6 +65,7 @@ export function getChatsUser(userId) {
                                 chat.lastMsg = msg
                             }
                         })
+                        socket.joinChat(chat.chatId, userId, JSON.parse(localStorage.getItem('auth')).name)
                     })
                     dispatch({ type: GET_CHATS_USER, payload: res.data.chats })
                 })
@@ -120,10 +121,10 @@ export function sendMessage(text, chatId, userId) {
         }
     }
 }
-export function setMessageStore(msg) {
+export function setMessageStore(msg, chatId) {
     return {
         type: SET_NEW_MESSAGE,
-        payload: msg
+        payload: {msg, chatId}
     }
 }
 

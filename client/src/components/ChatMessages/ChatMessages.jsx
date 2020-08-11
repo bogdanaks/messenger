@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { setMessageStore, setOnlineUsers } from '../../redux/actions'
 import socket from '../../utils/socket'
 import './styles.scss'
 
-const ChatMessages = ({ id }) => {
+const ChatMessages = () => {
     const [socketMsg, setSocketMsg] = useState()
     const messages = useSelector(state => state.chats.messages)
     const dispatch = useDispatch()
     const chatRef = useRef()
+
+    const { id } = useParams()
+
     useEffect(() => {
-        socket.joinChat(id, JSON.parse(localStorage.getItem('auth')).userId, JSON.parse(localStorage.getItem('auth')).name)
+        // socket.joinChat(id, JSON.parse(localStorage.getItem('auth')).userId, JSON.parse(localStorage.getItem('auth')).name)
         socket.setOnlineUsers(dispatch, setOnlineUsers)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -22,7 +26,7 @@ const ChatMessages = ({ id }) => {
 
     useEffect(() => {
         if(socketMsg) {
-            dispatch(setMessageStore(socketMsg))
+            dispatch(setMessageStore(socketMsg, id))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [socketMsg])

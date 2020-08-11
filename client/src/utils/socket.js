@@ -26,7 +26,7 @@ const setOnlineUsers = (dispatch, action) => {
     })
 }
 
-const getMessage = (state) => {
+const getMessage = (state, chatId) => {
     socket.on('CHAT:GET_MESSAGE', (payload) => {
         state(payload)
     })

@@ -22,11 +22,12 @@ const socketMiddleware = (socket, allClients) => {
 
     socket.on('CHAT:GET_ONLINE', data => {
         let array = allClients.filter((user) => user.chatId === data.chatId)
-        socket.emit('CHAT:SET_ONLINE', array)
+        socket.to(data.chatId).emit('CHAT:SET_ONLINE', array)
     })
 
     socket.on('CHAT:SEND_MESSAGE', data => {
         socket.to(data.chatId).emit('CHAT:GET_MESSAGE', data)
+        socket.emit('CHAT:GET_MESSAGE', data)
     })
 }
 

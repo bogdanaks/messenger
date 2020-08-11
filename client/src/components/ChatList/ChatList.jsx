@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 import { getMessages } from '../../redux/actions'
+import socket from '../../utils/socket'
 import './styles.scss'
 
 const ChatList = ({ id }) => {
@@ -12,6 +13,7 @@ const ChatList = ({ id }) => {
     const handleChatClick = (chatId) => {
         history.push('/chats/'+chatId)
         dispatch(getMessages(chatId))
+        // socket.getOnlineUsers(chatId)
     }
     return (
         <div className="wrapperChatList">
